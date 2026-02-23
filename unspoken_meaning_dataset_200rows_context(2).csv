@@ -1,0 +1,201 @@
+message,label,emoji_suggestion,hidden_meaning,context,situation,speaker_role
+As you wish.,reluctant,😕,Forced acceptance,relationship,decision_making,friend
+As you wish.,reluctant,😕,Forced acceptance,classroom,decision_making,student
+I'll think about it.,confused,🤔,Mentally uncertain,friend_chat,conflict,student
+I guess so.,confused,🤷,Lack of clarity,family_chat,decision_making,student
+That's interesting.,neutral,😶,Polite but distant,relationship,decision_making,parent
+"Sure, why not.",sarcastic,🙃,Annoyed but pretending,friend_chat,emotional,student
+As you wish.,reluctant,😕,Forced acceptance,family_chat,decision_making,parent
+Leave it.,angry,😠,Shutting down,family_chat,conflict,parent
+It's fine.,passive_aggressive,😒,Upset but avoiding conflict,workplace,conflict,parent
+Okay then.,neutral,🙂,Acceptance,friend_chat,casual_chat,parent
+We’ll see.,avoidant,😬,Avoiding commitment,family_chat,emotional,parent
+Fine by me.,neutral,🙂,No resistance,workplace,emotional,partner
+Okay then.,neutral,🙂,Acceptance,friend_chat,emotional,parent
+If you say so.,dismissive,😐,Emotionally disengaged,classroom,emotional,friend
+I'll think about it.,confused,🤔,Mentally uncertain,friend_chat,casual_chat,student
+I'm alright.,hurt,🥲,Hiding emotional pain,family_chat,conflict,friend
+"Sure, why not.",sarcastic,🙃,Annoyed but pretending,workplace,casual_chat,friend
+Okay then.,neutral,🙂,Acceptance,relationship,decision_making,manager
+I’m just tired.,anxious,😞,Emotionally exhausted,family_chat,conflict,manager
+Okay... as you say.,reluctant,😕,Not really agreeing,friend_chat,casual_chat,friend
+Forget it.,hurt,🥲,Feeling dismissed,friend_chat,casual_chat,friend
+Totally okay.,neutral,🙂,Actually fine,workplace,casual_chat,partner
+It's fine.,passive_aggressive,😒,Upset but avoiding conflict,workplace,conflict,student
+I'm alright.,hurt,🥲,Hiding emotional pain,workplace,emotional,manager
+You decide.,avoidant,😬,Avoiding responsibility,family_chat,decision_making,parent
+Up to you.,avoidant,😬,Avoiding responsibility,classroom,emotional,friend
+Okay then.,neutral,🙂,Acceptance,classroom,conflict,friend
+Up to you.,avoidant,😬,Avoiding responsibility,classroom,conflict,parent
+Okay then.,neutral,🙂,Acceptance,friend_chat,conflict,manager
+Good for you.,manipulative,😏,Hidden jealousy,family_chat,conflict,parent
+"Sure, why not.",sarcastic,🙃,Annoyed but pretending,relationship,conflict,partner
+"Sure, why not.",sarcastic,🙃,Annoyed but pretending,classroom,decision_making,parent
+Forget it.,hurt,🥲,Feeling dismissed,family_chat,emotional,friend
+I'll think about it.,confused,🤔,Mentally uncertain,relationship,casual_chat,partner
+We’ll see.,avoidant,😬,Avoiding commitment,friend_chat,casual_chat,parent
+Do whatever you want.,angry,😠,Frustrated and dismissive,classroom,argument,partner
+I don't mind.,neutral,🙂,No preference,workplace,argument,student
+That's interesting.,neutral,😶,Polite but distant,family_chat,casual_chat,friend
+Fine by me.,neutral,🙂,No resistance,friend_chat,argument,friend
+Okay then.,neutral,🙂,Acceptance,workplace,conflict,student
+Leave it.,angry,😠,Shutting down,friend_chat,emotional,student
+We’ll see.,avoidant,😬,Avoiding commitment,relationship,casual_chat,manager
+"Yeah, great.",sarcastic,😑,Not actually happy,relationship,decision_making,student
+Whatever.,dismissive,😐,Doesn’t care,family_chat,argument,student
+I don’t know anymore.,anxious,😟,Overwhelmed,classroom,emotional,partner
+Leave it.,angry,😠,Shutting down,workplace,decision_making,student
+Whatever.,dismissive,😐,Doesn’t care,friend_chat,argument,student
+I'm alright.,hurt,🥲,Hiding emotional pain,family_chat,emotional,parent
+Okay then.,neutral,🙂,Acceptance,family_chat,decision_making,friend
+Forget it.,hurt,🥲,Feeling dismissed,family_chat,emotional,manager
+Whatever.,dismissive,😐,Doesn’t care,workplace,decision_making,partner
+Fine by me.,neutral,🙂,No resistance,classroom,argument,friend
+"Yeah, great.",sarcastic,😑,Not actually happy,family_chat,casual_chat,partner
+"Sure, why not.",sarcastic,🙃,Annoyed but pretending,family_chat,decision_making,manager
+Forget it.,hurt,🥲,Feeling dismissed,classroom,argument,manager
+Totally okay.,neutral,🙂,Actually fine,classroom,argument,friend
+Do whatever you want.,angry,😠,Frustrated and dismissive,friend_chat,conflict,friend
+No problem.,neutral,🙂,Genuinely okay,workplace,emotional,manager
+I don’t know anymore.,anxious,😟,Overwhelmed,classroom,decision_making,partner
+Leave it.,angry,😠,Shutting down,workplace,conflict,parent
+Forget it.,hurt,🥲,Feeling dismissed,classroom,argument,partner
+We’ll see.,avoidant,😬,Avoiding commitment,relationship,emotional,student
+It's fine.,passive_aggressive,😒,Upset but avoiding conflict,workplace,argument,parent
+We’ll see.,avoidant,😬,Avoiding commitment,relationship,argument,student
+Up to you.,avoidant,😬,Avoiding responsibility,relationship,casual_chat,student
+That's interesting.,neutral,😶,Polite but distant,family_chat,conflict,student
+I’m just tired.,anxious,😞,Emotionally exhausted,friend_chat,argument,friend
+That's interesting.,neutral,😶,Polite but distant,classroom,emotional,student
+That's interesting.,neutral,😶,Polite but distant,classroom,emotional,manager
+If you say so.,dismissive,😐,Emotionally disengaged,family_chat,conflict,parent
+Do whatever you want.,angry,😠,Frustrated and dismissive,family_chat,casual_chat,manager
+Leave it.,angry,😠,Shutting down,family_chat,casual_chat,manager
+Good for you.,manipulative,😏,Hidden jealousy,relationship,emotional,friend
+I guess so.,confused,🤷,Lack of clarity,workplace,argument,parent
+No problem.,neutral,🙂,Genuinely okay,friend_chat,casual_chat,student
+I don't mind.,neutral,🙂,No preference,workplace,casual_chat,parent
+Do whatever you want.,angry,😠,Frustrated and dismissive,friend_chat,emotional,student
+Are you sure?,confused,🤔,Seeking reassurance,relationship,emotional,friend
+Leave it.,angry,😠,Shutting down,family_chat,decision_making,parent
+We’ll see.,avoidant,😬,Avoiding commitment,workplace,conflict,parent
+I’m just tired.,anxious,😞,Emotionally exhausted,family_chat,emotional,manager
+I'm alright.,hurt,🥲,Hiding emotional pain,relationship,decision_making,friend
+"Sure, why not.",sarcastic,🙃,Annoyed but pretending,relationship,casual_chat,manager
+No problem.,neutral,🙂,Genuinely okay,family_chat,conflict,student
+Up to you.,avoidant,😬,Avoiding responsibility,classroom,emotional,parent
+Whatever.,dismissive,😐,Doesn’t care,workplace,casual_chat,friend
+I don’t know anymore.,anxious,😟,Overwhelmed,family_chat,casual_chat,parent
+Leave it.,angry,😠,Shutting down,classroom,decision_making,friend
+Okay then.,neutral,🙂,Acceptance,relationship,emotional,parent
+You decide.,avoidant,😬,Avoiding responsibility,classroom,argument,partner
+If you say so.,dismissive,😐,Emotionally disengaged,family_chat,argument,manager
+Leave it.,angry,😠,Shutting down,relationship,decision_making,friend
+We’ll see.,avoidant,😬,Avoiding commitment,workplace,casual_chat,manager
+Up to you.,avoidant,😬,Avoiding responsibility,friend_chat,conflict,student
+No problem.,neutral,🙂,Genuinely okay,family_chat,decision_making,student
+Do whatever you want.,angry,😠,Frustrated and dismissive,classroom,emotional,partner
+Whatever makes you happy.,passive_aggressive,😒,Detached caring,friend_chat,casual_chat,parent
+Okay then.,neutral,🙂,Acceptance,relationship,argument,student
+That's interesting.,neutral,😶,Polite but distant,friend_chat,conflict,partner
+We’ll see.,avoidant,😬,Avoiding commitment,family_chat,decision_making,friend
+Do whatever you want.,angry,😠,Frustrated and dismissive,family_chat,conflict,parent
+It's fine.,passive_aggressive,😒,Upset but avoiding conflict,classroom,casual_chat,student
+Whatever.,dismissive,😐,Doesn’t care,relationship,conflict,parent
+I guess so.,confused,🤷,Lack of clarity,classroom,decision_making,manager
+Are you sure?,confused,🤔,Seeking reassurance,relationship,casual_chat,parent
+Forget it.,hurt,🥲,Feeling dismissed,workplace,emotional,parent
+I don’t know anymore.,anxious,😟,Overwhelmed,workplace,decision_making,friend
+Fine by me.,neutral,🙂,No resistance,classroom,conflict,partner
+Totally okay.,neutral,🙂,Actually fine,family_chat,decision_making,student
+I'm alright.,hurt,🥲,Hiding emotional pain,relationship,decision_making,student
+Up to you.,avoidant,😬,Avoiding responsibility,friend_chat,decision_making,friend
+No problem.,neutral,🙂,Genuinely okay,family_chat,argument,friend
+I guess so.,confused,🤷,Lack of clarity,relationship,emotional,student
+Leave it.,angry,😠,Shutting down,relationship,casual_chat,friend
+Forget it.,hurt,🥲,Feeling dismissed,family_chat,conflict,manager
+I don't mind.,neutral,🙂,No preference,relationship,emotional,friend
+I'll think about it.,confused,🤔,Mentally uncertain,relationship,decision_making,student
+As you wish.,reluctant,😕,Forced acceptance,friend_chat,casual_chat,friend
+It's fine.,passive_aggressive,😒,Upset but avoiding conflict,family_chat,emotional,student
+No problem.,neutral,🙂,Genuinely okay,friend_chat,emotional,friend
+Whatever.,dismissive,😐,Doesn’t care,relationship,decision_making,manager
+"Sure, why not.",sarcastic,🙃,Annoyed but pretending,family_chat,conflict,student
+Good for you.,manipulative,😏,Hidden jealousy,relationship,casual_chat,student
+Leave it.,angry,😠,Shutting down,family_chat,decision_making,parent
+Fine by me.,neutral,🙂,No resistance,family_chat,emotional,manager
+I'm alright.,hurt,🥲,Hiding emotional pain,friend_chat,argument,manager
+"Sure, why not.",sarcastic,🙃,Annoyed but pretending,classroom,decision_making,partner
+Do whatever you want.,angry,😠,Frustrated and dismissive,classroom,casual_chat,manager
+Whatever.,dismissive,😐,Doesn’t care,classroom,argument,student
+I guess so.,confused,🤷,Lack of clarity,workplace,emotional,partner
+We’ll see.,avoidant,😬,Avoiding commitment,relationship,emotional,manager
+I don't mind.,neutral,🙂,No preference,workplace,argument,parent
+I'll think about it.,confused,🤔,Mentally uncertain,friend_chat,decision_making,student
+Leave it.,angry,😠,Shutting down,family_chat,argument,parent
+I'm alright.,hurt,🥲,Hiding emotional pain,workplace,casual_chat,parent
+Leave it.,angry,😠,Shutting down,friend_chat,emotional,student
+I’m just tired.,anxious,😞,Emotionally exhausted,workplace,casual_chat,parent
+"Sure, why not.",sarcastic,🙃,Annoyed but pretending,workplace,argument,manager
+It's fine.,passive_aggressive,😒,Upset but avoiding conflict,relationship,argument,manager
+Totally okay.,neutral,🙂,Actually fine,friend_chat,emotional,friend
+Good for you.,manipulative,😏,Hidden jealousy,classroom,casual_chat,partner
+Up to you.,avoidant,😬,Avoiding responsibility,classroom,decision_making,friend
+If you say so.,dismissive,😐,Emotionally disengaged,family_chat,emotional,partner
+"Sure, why not.",sarcastic,🙃,Annoyed but pretending,relationship,emotional,friend
+I’m just tired.,anxious,😞,Emotionally exhausted,family_chat,emotional,partner
+It's fine.,passive_aggressive,😒,Upset but avoiding conflict,relationship,emotional,parent
+Never mind.,hurt,🥺,Backing down sadly,classroom,casual_chat,parent
+Fine by me.,neutral,🙂,No resistance,workplace,conflict,manager
+I guess so.,confused,🤷,Lack of clarity,friend_chat,casual_chat,manager
+I'll think about it.,confused,🤔,Mentally uncertain,family_chat,casual_chat,parent
+It's fine.,passive_aggressive,😒,Upset but avoiding conflict,relationship,decision_making,parent
+I guess so.,confused,🤷,Lack of clarity,family_chat,argument,partner
+"Sure, why not.",sarcastic,🙃,Annoyed but pretending,workplace,argument,parent
+Good for you.,manipulative,😏,Hidden jealousy,family_chat,emotional,student
+"Yeah, great.",sarcastic,😑,Not actually happy,friend_chat,casual_chat,partner
+Never mind.,hurt,🥺,Backing down sadly,friend_chat,casual_chat,manager
+Okay then.,neutral,🙂,Acceptance,relationship,emotional,partner
+If you say so.,dismissive,😐,Emotionally disengaged,friend_chat,emotional,student
+You decide.,avoidant,😬,Avoiding responsibility,workplace,conflict,manager
+Fine by me.,neutral,🙂,No resistance,friend_chat,argument,student
+Leave it.,angry,😠,Shutting down,friend_chat,casual_chat,parent
+I’m just tired.,anxious,😞,Emotionally exhausted,classroom,decision_making,student
+I guess so.,confused,🤷,Lack of clarity,workplace,conflict,manager
+Whatever makes you happy.,passive_aggressive,😒,Detached caring,friend_chat,conflict,student
+Okay... as you say.,reluctant,😕,Not really agreeing,relationship,argument,manager
+Whatever.,dismissive,😐,Doesn’t care,relationship,decision_making,student
+Do whatever you want.,angry,😠,Frustrated and dismissive,family_chat,casual_chat,partner
+We’ll see.,avoidant,😬,Avoiding commitment,relationship,casual_chat,parent
+Okay then.,neutral,🙂,Acceptance,workplace,decision_making,parent
+No problem.,neutral,🙂,Genuinely okay,relationship,decision_making,friend
+I’m just tired.,anxious,😞,Emotionally exhausted,relationship,conflict,manager
+That's interesting.,neutral,😶,Polite but distant,friend_chat,casual_chat,partner
+No problem.,neutral,🙂,Genuinely okay,workplace,conflict,partner
+As you wish.,reluctant,😕,Forced acceptance,classroom,decision_making,manager
+Whatever.,dismissive,😐,Doesn’t care,workplace,casual_chat,parent
+Forget it.,hurt,🥲,Feeling dismissed,friend_chat,emotional,partner
+"Sure, why not.",sarcastic,🙃,Annoyed but pretending,relationship,conflict,partner
+Never mind.,hurt,🥺,Backing down sadly,workplace,argument,student
+Do whatever you want.,angry,😠,Frustrated and dismissive,family_chat,conflict,partner
+Okay... as you say.,reluctant,😕,Not really agreeing,friend_chat,emotional,manager
+No problem.,neutral,🙂,Genuinely okay,family_chat,decision_making,friend
+Are you sure?,confused,🤔,Seeking reassurance,relationship,argument,partner
+I don’t know anymore.,anxious,😟,Overwhelmed,relationship,argument,parent
+"Sure, why not.",sarcastic,🙃,Annoyed but pretending,classroom,argument,manager
+If you say so.,dismissive,😐,Emotionally disengaged,relationship,conflict,student
+Do whatever you want.,angry,😠,Frustrated and dismissive,friend_chat,argument,manager
+I don't mind.,neutral,🙂,No preference,friend_chat,decision_making,parent
+You decide.,avoidant,😬,Avoiding responsibility,classroom,decision_making,friend
+I guess so.,confused,🤷,Lack of clarity,classroom,conflict,friend
+I guess so.,confused,🤷,Lack of clarity,classroom,casual_chat,partner
+Forget it.,hurt,🥲,Feeling dismissed,classroom,conflict,parent
+Forget it.,hurt,🥲,Feeling dismissed,relationship,decision_making,student
+I guess so.,confused,🤷,Lack of clarity,workplace,decision_making,parent
+No problem.,neutral,🙂,Genuinely okay,family_chat,casual_chat,partner
+Okay then.,neutral,🙂,Acceptance,family_chat,conflict,partner
+Okay... as you say.,reluctant,😕,Not really agreeing,family_chat,casual_chat,partner
+As you wish.,reluctant,😕,Forced acceptance,workplace,emotional,manager
+"Sure, why not.",sarcastic,🙃,Annoyed but pretending,friend_chat,conflict,friend
+Leave it.,angry,😠,Shutting down,relationship,emotional,parent
+We’ll see.,avoidant,😬,Avoiding commitment,workplace,emotional,student
