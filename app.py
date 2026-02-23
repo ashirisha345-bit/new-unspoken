@@ -23,12 +23,12 @@ CSV_FILE      = "unspoken_meaning_dataset_200rows_context(2).csv"
 MODEL_DIR     = "./unspoken_model"
 MAPPINGS_FILE = "./label_mappings.json"
 
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+DEVICE = "cpu"  # force cpu - cloud has no gpu
 
 # ───────────────────────────────────────────────
 # DATA & MODEL PREPARATION (runs once + cached)
 # ───────────────────────────────────────────────
-@st.cache_resource(show_spinner="Preparing model (first run may take 3–12 minutes)…")
+@st.cache_resource(show_spinner="Preparing model (first run may take 5–15 minutes)…")
 def load_or_train_model():
     if Path(MODEL_DIR).is_dir() and Path(MAPPINGS_FILE).is_file():
         tokenizer = DistilBertTokenizerFast.from_pretrained(MODEL_DIR)
@@ -45,7 +45,6 @@ def load_or_train_model():
 
     df = pd.read_csv(CSV_FILE)
 
-    # Label setup
     unique_labels = sorted(df['label'].unique())
     label2id = {lbl: idx for idx, lbl in enumerate(unique_labels)}
     id2label = {str(idx): lbl for lbl, idx in label2id.items()}
@@ -61,14 +60,12 @@ def load_or_train_model():
         "all_labels": unique_labels
     }
 
-    # Prepare input format
     def build_input(row):
         return f"Message: {row['message']} Context: {row['context']} Situation: {row['situation']} Role: {row['speaker_role']}"
 
     df['text'] = df.apply(build_input, axis=1)
     df['labels'] = df['label'].map(label2id)
 
-    # Split
     train_df, eval_df = train_test_split(
         df, test_size=0.15, stratify=df['labels'], random_state=42
     )
@@ -98,7 +95,7 @@ def load_or_train_model():
 
     args = TrainingArguments(
         output_dir="./training_tmp",
-        num_train_epochs=4,
+        num_train_epochs=3,
         per_device_train_batch_size=8,
         per_device_eval_batch_size=8,
         evaluation_strategy="epoch",
@@ -107,15 +104,19 @@ def load_or_train_model():
         metric_for_best_model="accuracy",
         greater_is_better=True,
         fp16=False,
+        bf16=False,
         report_to="none",
-        logging_steps=20,
+        logging_steps=30,
         disable_tqdm=False,
+        optim="adamw_torch",
+        lr_scheduler_type="linear",
+        warmup_steps=50,
     )
 
     def compute_metrics(eval_pred):
         logits, labels = eval_pred
-        preds = np.argmax(logits, axis=-1)
-        acc = accuracy_score(labels, preds)
+        predictions = np.argmax(logits, axis=-1)
+        acc = accuracy_score(labels, predictions)
         return {"accuracy": acc}
 
     trainer = Trainer(
@@ -127,22 +128,21 @@ def load_or_train_model():
         compute_metrics=compute_metrics,
     )
 
-    with st.spinner("Fine-tuning DistilBERT on your dataset…"):
+    with st.spinner("Fine-tuning DistilBERT (CPU mode)..."):
         trainer.train()
 
-    # Save
     trainer.save_model(MODEL_DIR)
     tokenizer.save_pretrained(MODEL_DIR)
+
     with open(MAPPINGS_FILE, "w", encoding="utf-8") as f:
         json.dump(mappings, f, ensure_ascii=False, indent=2)
 
-    # Clean up
     try:
         shutil.rmtree("./training_tmp", ignore_errors=True)
     except:
         pass
 
-    st.success("Training complete. Model saved for future runs.")
+    st.success("Training finished. Model saved.")
     return tokenizer, model, mappings
 
 
