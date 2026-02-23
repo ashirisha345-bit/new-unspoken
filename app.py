@@ -1,7 +1,6 @@
-```python
 # app.py
 # Unspoken Meaning Detector – DistilBERT + Context
-# Streamlit-safe version (NO Trainer / NO TrainingArguments / Python 3.13 compatible)
+# Streamlit-safe, Python 3.13 compatible
 # Run: streamlit run app.py
 
 import streamlit as st
@@ -16,13 +15,12 @@ import matplotlib.pyplot as plt
 # ───────────────────────────────────────────────
 # CONFIG
 # ───────────────────────────────────────────────
-CSV_FILE      = "unspoken_meaning_dataset_200rows_context(2).csv"
-MODEL_NAME    = "distilbert-base-uncased"
-MAPPINGS_FILE = "./label_mappings.json"
+CSV_FILE = "unspoken_meaning_dataset_200rows_context(2).csv"
+MODEL_NAME = "distilbert-base-uncased"
 DEVICE = torch.device("cpu")
 
 # ───────────────────────────────────────────────
-# LOAD MODEL + DATA (SAFE FOR STREAMLIT CLOUD)
+# LOAD MODEL + DATA (NO TRAINER, NO TrainingArguments)
 # ───────────────────────────────────────────────
 @st.cache_resource(show_spinner="Loading model and dataset…")
 def load_model_and_data():
@@ -50,13 +48,14 @@ def load_model_and_data():
         num_labels=len(unique_labels),
         id2label={int(k): v for k, v in id2label.items()},
         label2id=label2id,
-    ).to(DEVICE)
+    )
+    model.to(DEVICE)
     model.eval()
 
-    return tokenizer, model, mappings, df
+    return tokenizer, model, mappings
 
 # ───────────────────────────────────────────────
-# PREDICTION (HEURISTIC + MODEL SAFE)
+# PREDICTION
 # ───────────────────────────────────────────────
 def predict_hidden_intent(message, context, situation, role, tokenizer, model, mappings):
     text = f"Message: {message} Context: {context} Situation: {situation} Role: {role}"
@@ -74,7 +73,7 @@ def predict_hidden_intent(message, context, situation, role, tokenizer, model, m
         outputs = model(**inputs)
 
     probs = torch.softmax(outputs.logits, dim=-1).cpu().numpy().squeeze()
-    pred_idx = int(probs.argmax())
+    pred_idx = int(np.argmax(probs))
 
     label = mappings["id_to_label"][str(pred_idx)]
     confidence = float(probs[pred_idx]) * 100
@@ -90,7 +89,7 @@ def main():
     st.title("🕵️‍♂️ Unspoken Meaning Detector")
     st.caption("Detecting hidden emotional intent behind everyday messages")
 
-    tokenizer, model, mappings, df = load_model_and_data()
+    tokenizer, model, mappings = load_model_and_data()
 
     message = st.text_area(
         "Paste or type the message here",
@@ -170,8 +169,11 @@ def main():
         st.subheader("Model's Probability Breakdown (Top 5)")
 
         prob_pairs = sorted(
-            zip(mappings["all_labels"], probs), key=lambda x: x[1], reverse=True
+            zip(mappings["all_labels"], probs),
+            key=lambda x: x[1],
+            reverse=True,
         )[:5]
+
         lbls, prs = zip(*prob_pairs)
 
         fig, ax = plt.subplots(figsize=(9, 4))
@@ -196,4 +198,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-```
