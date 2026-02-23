@@ -106,15 +106,16 @@ def load_or_train_model():
         load_best_model_at_end=True,
         metric_for_best_model="accuracy",
         greater_is_better=True,
-        fp16=False,                      # Forced off – Streamlit Cloud is CPU-only
+        fp16=False,
         report_to="none",
         logging_steps=20,
         disable_tqdm=False,
     )
 
-    def compute_metrics(p):
-        preds = np.argmax(p.predictions, axis=1)
-        acc = accuracy_score(p.label_ids, preds)
+    def compute_metrics(eval_pred):
+        logits, labels = eval_pred
+        preds = np.argmax(logits, axis=-1)
+        acc = accuracy_score(labels, preds)
         return {"accuracy": acc}
 
     trainer = Trainer(
@@ -127,11 +128,7 @@ def load_or_train_model():
     )
 
     with st.spinner("Fine-tuning DistilBERT on your dataset…"):
-        try:
-            trainer.train()
-        except Exception as e:
-            st.error(f"Training failed: {str(e)}")
-            st.stop()
+        trainer.train()
 
     # Save
     trainer.save_model(MODEL_DIR)
@@ -139,7 +136,7 @@ def load_or_train_model():
     with open(MAPPINGS_FILE, "w", encoding="utf-8") as f:
         json.dump(mappings, f, ensure_ascii=False, indent=2)
 
-    # Clean up temporary training files
+    # Clean up
     try:
         shutil.rmtree("./training_tmp", ignore_errors=True)
     except:
@@ -184,7 +181,6 @@ def main():
 
     tokenizer, model, mappings = load_or_train_model()
 
-    # ── INPUT ────────────────────────────────────────────
     message = st.text_area(
         "Paste or type the message here",
         height=100,
@@ -221,7 +217,6 @@ def main():
         emoji = mappings["label_to_emoji"].get(label, "😶")
         meaning = mappings["label_to_meaning"].get(label, "—")
 
-        # ── RESULT LAYOUT ────────────────────────────────────
         st.markdown("---")
 
         left, right = st.columns([5, 4])
@@ -252,7 +247,6 @@ def main():
             else:
                 st.success(f"**{level}** – mostly literal")
 
-        # Insight
         st.markdown("---")
         with st.expander("🧠 Quick Insight", expanded=True):
             st.write(
@@ -261,7 +255,6 @@ def main():
                 "while trying to keep things surface-polite or avoid escalation."
             )
 
-        # Distribution chart
         st.markdown("---")
         st.subheader("Model's Probability Breakdown (Top 5)")
 
