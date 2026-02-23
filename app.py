@@ -1,5 +1,7 @@
+```python
 # app.py
-# Unspoken Meaning Detector – DistilBERT + Context – single file version
+# Unspoken Meaning Detector – DistilBERT + Context
+# Streamlit-safe version (NO Trainer / NO TrainingArguments / Python 3.13 compatible)
 # Run: streamlit run app.py
 
 import streamlit as st
@@ -7,43 +9,23 @@ import pandas as pd
 import numpy as np
 import torch
 import json
-import os
-import shutil
 from pathlib import Path
-from transformers import (
-    DistilBertTokenizerFast,
-    DistilBertForSequenceClassification,
-    Trainer,
-    TrainingArguments,
-)
-from datasets import Dataset
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
+from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification
 import matplotlib.pyplot as plt
 
 # ───────────────────────────────────────────────
 # CONFIG
 # ───────────────────────────────────────────────
 CSV_FILE      = "unspoken_meaning_dataset_200rows_context(2).csv"
-MODEL_DIR     = "./unspoken_model"
+MODEL_NAME    = "distilbert-base-uncased"
 MAPPINGS_FILE = "./label_mappings.json"
-
 DEVICE = torch.device("cpu")
 
 # ───────────────────────────────────────────────
-# DATA & MODEL PREPARATION
+# LOAD MODEL + DATA (SAFE FOR STREAMLIT CLOUD)
 # ───────────────────────────────────────────────
-@st.cache_resource(show_spinner="Preparing model (first run may take 5–15 minutes)…")
-def load_or_train_model():
-    if Path(MODEL_DIR).is_dir() and Path(MAPPINGS_FILE).is_file():
-        tokenizer = DistilBertTokenizerFast.from_pretrained(MODEL_DIR)
-        model = DistilBertForSequenceClassification.from_pretrained(MODEL_DIR)
-        model.to(DEVICE)
-        model.eval()
-        with open(MAPPINGS_FILE, "r", encoding="utf-8") as f:
-            mappings = json.load(f)
-        return tokenizer, model, mappings
-
+@st.cache_resource(show_spinner="Loading model and dataset…")
+def load_model_and_data():
     if not Path(CSV_FILE).is_file():
         st.error(f"CSV file not found: {CSV_FILE}")
         st.stop()
@@ -52,105 +34,29 @@ def load_or_train_model():
 
     unique_labels = sorted(df["label"].unique())
     label2id = {lbl: i for i, lbl in enumerate(unique_labels)}
-    id2label = {i: lbl for lbl, i in label2id.items()}
+    id2label = {str(i): lbl for lbl, i in label2id.items()}
 
     mappings = {
         "label_to_id": label2id,
-        "id_to_label": {str(k): v for k, v in id2label.items()},
+        "id_to_label": id2label,
         "label_to_emoji": df.groupby("label")["emoji_suggestion"].first().to_dict(),
         "label_to_meaning": df.groupby("label")["hidden_meaning"].first().to_dict(),
         "all_labels": unique_labels,
     }
 
-    def build_input(row):
-        return (
-            f"Message: {row['message']} "
-            f"Context: {row['context']} "
-            f"Situation: {row['situation']} "
-            f"Role: {row['speaker_role']}"
-        )
-
-    df["text"] = df.apply(build_input, axis=1)
-    df["labels"] = df["label"].map(label2id)
-
-    train_df, eval_df = train_test_split(
-        df, test_size=0.15, stratify=df["labels"], random_state=42
-    )
-
-    train_ds = Dataset.from_pandas(train_df[["text", "labels"]], preserve_index=False)
-    eval_ds  = Dataset.from_pandas(eval_df[["text", "labels"]], preserve_index=False)
-
-    tokenizer = DistilBertTokenizerFast.from_pretrained("distilbert-base-uncased")
-
-    def tokenize_fn(batch):
-        return tokenizer(
-            batch["text"],
-            padding="max_length",
-            truncation=True,
-            max_length=128,
-        )
-
-    train_ds = train_ds.map(tokenize_fn, batched=True, remove_columns=["text"])
-    eval_ds  = eval_ds.map(tokenize_fn, batched=True, remove_columns=["text"])
-
+    tokenizer = DistilBertTokenizerFast.from_pretrained(MODEL_NAME)
     model = DistilBertForSequenceClassification.from_pretrained(
-        "distilbert-base-uncased",
+        MODEL_NAME,
         num_labels=len(unique_labels),
-        id2label=id2label,
+        id2label={int(k): v for k, v in id2label.items()},
         label2id=label2id,
     ).to(DEVICE)
-
-    args = TrainingArguments(
-        output_dir="./training_tmp",
-        num_train_epochs=3,
-        per_device_train_batch_size=8,
-        per_device_eval_batch_size=8,
-        eval_strategy="epoch",
-        save_strategy="epoch",
-        load_best_model_at_end=True,
-        metric_for_best_model="accuracy",
-        greater_is_better=True,
-        fp16=False,
-        bf16=False,
-        report_to="none",
-        logging_steps=30,
-        disable_tqdm=False,
-        optim="adamw_torch",
-        lr_scheduler_type="linear",
-        warmup_steps=50,
-    )
-
-    def compute_metrics(eval_pred):
-        logits, labels = eval_pred
-        preds = np.argmax(logits, axis=-1)
-        return {"accuracy": accuracy_score(labels, preds)}
-
-    trainer = Trainer(
-        model=model,
-        args=args,
-        train_dataset=train_ds,
-        eval_dataset=eval_ds,
-        tokenizer=tokenizer,
-        compute_metrics=compute_metrics,
-    )
-
-    with st.spinner("Fine-tuning DistilBERT (CPU mode)..."):
-        trainer.train()
-
-    trainer.save_model(MODEL_DIR)
-    tokenizer.save_pretrained(MODEL_DIR)
-
-    with open(MAPPINGS_FILE, "w", encoding="utf-8") as f:
-        json.dump(mappings, f, ensure_ascii=False, indent=2)
-
-    shutil.rmtree("./training_tmp", ignore_errors=True)
-
     model.eval()
-    return tokenizer, model, mappings
 
+    return tokenizer, model, mappings, df
 
 # ───────────────────────────────────────────────
-# PREDICTION
+# PREDICTION (HEURISTIC + MODEL SAFE)
 # ───────────────────────────────────────────────
 def predict_hidden_intent(message, context, situation, role, tokenizer, model, mappings):
     text = f"Message: {message} Context: {context} Situation: {situation} Role: {role}"
@@ -169,11 +75,11 @@ def predict_hidden_intent(message, context, situation, role, tokenizer, model, m
 
     probs = torch.softmax(outputs.logits, dim=-1).cpu().numpy().squeeze()
     pred_idx = int(probs.argmax())
+
     label = mappings["id_to_label"][str(pred_idx)]
     confidence = float(probs[pred_idx]) * 100
 
     return label, confidence, probs, text
-
 
 # ───────────────────────────────────────────────
 # STREAMLIT UI
@@ -184,7 +90,7 @@ def main():
     st.title("🕵️‍♂️ Unspoken Meaning Detector")
     st.caption("Detecting hidden emotional intent behind everyday messages")
 
-    tokenizer, model, mappings = load_or_train_model()
+    tokenizer, model, mappings, df = load_model_and_data()
 
     message = st.text_area(
         "Paste or type the message here",
@@ -252,6 +158,14 @@ def main():
             st.info(meaning)
             st.progress(min(conf / 100, 1.0))
 
+            level = "High" if conf > 80 else "Moderate" if conf > 45 else "Low"
+            if level == "High":
+                st.error(f"**{level}** – strong suppressed emotion likely")
+            elif level == "Moderate":
+                st.warning(f"**{level}** – noticeable undertone")
+            else:
+                st.success(f"**{level}** – mostly literal")
+
         st.markdown("---")
         st.subheader("Model's Probability Breakdown (Top 5)")
 
@@ -263,6 +177,8 @@ def main():
         fig, ax = plt.subplots(figsize=(9, 4))
         bars = ax.barh(lbls, prs)
         ax.set_xlim(0, 1)
+        ax.set_xlabel("Probability")
+
         for bar in bars:
             w = bar.get_width()
             ax.text(
@@ -272,6 +188,7 @@ def main():
                 va="center",
                 fontsize=9,
             )
+
         st.pyplot(fig)
 
         with st.expander("Input sent to model"):
@@ -279,3 +196,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+```
