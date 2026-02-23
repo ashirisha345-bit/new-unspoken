@@ -1,9 +1,8 @@
 # app.py
-# Unspoken Meaning Detector – Proper ML (TF-IDF + Logistic Regression)
-# ✅ Single-file architecture
-# ✅ No extra model files
-# ✅ Trains once in-memory from CSV
-# ✅ Works reliably on Streamlit Cloud (Python 3.13)
+# Unspoken Meaning Detector – Robust ML (TF-IDF + Logistic Regression)
+# ✔ Single file (app.py only)
+# ✔ No saved models / no extra files
+# ✔ Stable on Streamlit Cloud (Python 3.13)
 # Run: streamlit run app.py
 
 import streamlit as st
@@ -23,9 +22,9 @@ import matplotlib.pyplot as plt
 CSV_FILE = "unspoken_meaning_dataset_200rows_context(2).csv"
 
 # ───────────────────────────────────────────────
-# LOAD DATA + TRAIN MODEL (ONCE, CACHED)
+# LOAD DATA + TRAIN MODEL (CACHED, SAFE)
 # ───────────────────────────────────────────────
-@st.cache_resource(show_spinner="Training language understanding model…")
+@st.cache_resource(show_spinner="Training model from dataset…")
 def load_and_train():
     if not Path(CSV_FILE).is_file():
         st.error(f"CSV file not found: {CSV_FILE}")
@@ -33,7 +32,7 @@ def load_and_train():
 
     df = pd.read_csv(CSV_FILE)
 
-    # Build rich text input (this is CRITICAL)
+    # Build rich combined text (VERY IMPORTANT)
     df["text"] = (
         "Message: " + df["message"].astype(str) +
         " | Context: " + df["context"].astype(str) +
@@ -45,10 +44,14 @@ def load_and_train():
     y = df["label"]
 
     X_train, X_val, y_train, y_val = train_test_split(
-        X, y, test_size=0.2, stratify=y, random_state=42
+        X,
+        y,
+        test_size=0.2,
+        stratify=y,
+        random_state=42
     )
 
-    # Strong, interpretable ML model for small datasets
+    # ⚠️ FIXED: removed incompatible parameters
     model = Pipeline([
         ("tfidf", TfidfVectorizer(
             ngram_range=(1, 3),
@@ -58,8 +61,7 @@ def load_and_train():
         ("clf", LogisticRegression(
             max_iter=2000,
             class_weight="balanced",
-            solver="lbfgs",
-            multi_class="auto"
+            solver="lbfgs"
         ))
     ])
 
@@ -91,7 +93,6 @@ def predict_hidden_intent(message, context, situation, role, model):
     confidence = float(probs[top_idx]) * 100
 
     prob_map = dict(zip(labels, probs))
-
     return label, confidence, prob_map, text
 
 # ───────────────────────────────────────────────
@@ -105,7 +106,7 @@ def main():
 
     model, mappings = load_and_train()
 
-    st.success(f"Model trained successfully · Validation accuracy: {mappings['accuracy']:.2%}")
+    st.success(f"Model trained · Validation accuracy: {mappings['accuracy']:.2%}")
 
     message = st.text_area(
         "Paste or type the message here",
