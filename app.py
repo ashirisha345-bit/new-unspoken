@@ -8,7 +8,7 @@ import numpy as np
 import torch
 import json
 import os
-import re
+import shutil
 from pathlib import Path
 from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification, Trainer, TrainingArguments
 from datasets import Dataset
@@ -19,7 +19,6 @@ import matplotlib.pyplot as plt
 # ───────────────────────────────────────────────
 # CONFIG
 # ───────────────────────────────────────────────
-
 CSV_FILE      = "unspoken_meaning_dataset_200rows_context(2).csv"
 MODEL_DIR     = "./unspoken_model"
 MAPPINGS_FILE = "./label_mappings.json"
@@ -29,8 +28,7 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 # ───────────────────────────────────────────────
 # DATA & MODEL PREPARATION (runs once + cached)
 # ───────────────────────────────────────────────
-
-@st.cache_resource(show_spinner="Preparing model (first run may take 3–10 minutes)…")
+@st.cache_resource(show_spinner="Preparing model (first run may take 3–12 minutes)…")
 def load_or_train_model():
     if Path(MODEL_DIR).is_dir() and Path(MAPPINGS_FILE).is_file():
         tokenizer = DistilBertTokenizerFast.from_pretrained(MODEL_DIR)
@@ -42,7 +40,7 @@ def load_or_train_model():
 
     # ── Train from scratch ───────────────────────────────
     if not Path(CSV_FILE).is_file():
-        st.error(f"CSV file not found: {CSV_FILE}\nPlease place it in the same folder as this script.")
+        st.error(f"CSV file not found: {CSV_FILE}\nPlease place it in the same folder.")
         st.stop()
 
     df = pd.read_csv(CSV_FILE)
@@ -108,9 +106,10 @@ def load_or_train_model():
         load_best_model_at_end=True,
         metric_for_best_model="accuracy",
         greater_is_better=True,
-        fp16=torch.cuda.is_available(),
+        fp16=False,                      # Forced off – Streamlit Cloud is CPU-only
         report_to="none",
-        logging_steps=10,
+        logging_steps=20,
+        disable_tqdm=False,
     )
 
     def compute_metrics(p):
@@ -128,13 +127,23 @@ def load_or_train_model():
     )
 
     with st.spinner("Fine-tuning DistilBERT on your dataset…"):
-        trainer.train()
+        try:
+            trainer.train()
+        except Exception as e:
+            st.error(f"Training failed: {str(e)}")
+            st.stop()
 
     # Save
     trainer.save_model(MODEL_DIR)
     tokenizer.save_pretrained(MODEL_DIR)
     with open(MAPPINGS_FILE, "w", encoding="utf-8") as f:
         json.dump(mappings, f, ensure_ascii=False, indent=2)
+
+    # Clean up temporary training files
+    try:
+        shutil.rmtree("./training_tmp", ignore_errors=True)
+    except:
+        pass
 
     st.success("Training complete. Model saved for future runs.")
     return tokenizer, model, mappings
@@ -143,7 +152,6 @@ def load_or_train_model():
 # ───────────────────────────────────────────────
 # PREDICTION FUNCTION
 # ───────────────────────────────────────────────
-
 def predict_hidden_intent(message, context, situation, role, tokenizer, model, mappings):
     text = f"Message: {message} Context: {context} Situation: {situation} Role: {role}"
     inputs = tokenizer(
@@ -168,7 +176,6 @@ def predict_hidden_intent(message, context, situation, role, tokenizer, model, m
 # ───────────────────────────────────────────────
 # STREAMLIT UI
 # ───────────────────────────────────────────────
-
 def main():
     st.set_page_config(page_title="Unspoken Meaning Detector", layout="wide")
 
@@ -274,6 +281,7 @@ def main():
 
         with st.expander("Input sent to model"):
             st.code(used_text, language=None)
+
 
 if __name__ == "__main__":
     main()
