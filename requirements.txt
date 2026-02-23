@@ -1,8 +1,8 @@
-streamlit>=1.38.0
+streamlit==1.38.0
 pandas
 numpy
 torch
-transformers>=4.45.0      # or latest, e.g. 4.48+ or just transformers
-datasets>=2.21.0
+transformers>=4.45.0     # or just "transformers" for latest (~4.48+ or 5.x in 2026)
+datasets==2.21.0
 scikit-learn
 matplotlib
